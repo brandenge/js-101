@@ -108,13 +108,13 @@ declare a function called merge that takes 2 arrays of equal length as arguments
 START
 
 FUNC merge(arr1, arr2)
-  SET result = empty array
+  SET result = []
   SET i = 0
-  WHILE i < length of result
-    push arr1[i]
-    push arr2[i]
+  WHILE i < result.length
+    result.push(arr1[i])
+    result.push(arr2[i])
     i += 1
   RETURN result
-  
+
 END
 ```
