@@ -1,7 +1,7 @@
 'use strict';
 
-const rl = require('readline-sync');
-const Calculator = require('./calculator');
+import rl from 'readline-sync';
+import Calculator from './Calculator.js';
 
 class App {
   start() {
