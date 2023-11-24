@@ -42,15 +42,12 @@ class App {
     const numPrompt = `What is the ${order} number? `;
     let num;
 
-    do {
+    while (true) {
       this.prompt(numPrompt);
       num = parseFloat(rl.question());
-      if (this.isInvalidNumber(num)) {
-        this.prompt("Hmmm...that doesn't look like a valid number.");
-      } else {
-        break;
-      }
-    } while (true);
+      if (this.isValidNumber(num)) break;
+      this.prompt("Hmmm...that doesn't look like a valid number.");
+    }
     return num;
   }
 
@@ -58,24 +55,21 @@ class App {
     const operatorPrompt = 'What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide:';
     let operator;
 
-    do {
+    while (true) {
       this.prompt(operatorPrompt);
       operator = rl.question();
-      if (this.isInvalidOperator(operator)) {
-        this.prompt('Must choose 1, 2, 3, or 4.');
-      } else {
-        break;
-      }
-    } while (true);
+      if (this.isValidOperator(operator)) break;
+      this.prompt('Must choose 1, 2, 3, or 4.');
+    }
     return operator;
   }
 
-  isInvalidNumber(num) {
-    return Number.isNaN(num);
+  isValidNumber(num) {
+    return !Number.isNaN(num);
   }
 
-  isInvalidOperator(operatorChoice) {
-    return !['1', '2', '3', '4'].includes(operatorChoice);
+  isValidOperator(operatorChoice) {
+    return ['1', '2', '3', '4'].includes(operatorChoice);
   }
 
   printResult(result) {
@@ -83,5 +77,4 @@ class App {
   }
 }
 
-const app = new App();
-app.start();
+export default App;
