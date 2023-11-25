@@ -12,4 +12,5 @@ class Calculator {
   }
 }
 
-export default Calculator;
+const calculator = new Calculator();
+export default calculator.calculate.bind(calculator);
