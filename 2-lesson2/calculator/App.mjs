@@ -1,7 +1,7 @@
 'use strict';
 
-import UserInput from './UserInput.js';
-import calculate from './Calculator.js';
+import UserInput from './UserInput.mjs';
+import calculate from './Calculator.mjs';
 
 // Current workaround for importing JSON files with ES modules
 // Reading the JSON file directly
