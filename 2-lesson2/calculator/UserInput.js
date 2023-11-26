@@ -3,7 +3,20 @@
 import { question } from 'readline-sync';
 import { execSync } from 'child_process';
 
-class UserInput {
+// Current workaround for importing JSON files with ES modules
+// Reading the JSON file directly
+import { readFile } from 'fs/promises';
+const PROMPTS = JSON.parse(
+  await readFile(
+    new URL('./prompts.json', import.meta.url)
+  )
+);
+
+export default class UserInput {
+  constructor(lang) {
+    this.lang = lang;
+  }
+
   prompt(message) {
     return `=> ${message}`;
   }
@@ -13,7 +26,9 @@ class UserInput {
       const result = execSync('clear', { encoding: 'utf-8' });
       console.log(result);
     } catch (error) {
-      console.error(`Error executing command: ${error.message}`);
+      const errorPrompt =
+        `${PROMPTS[this.lang]["errors"]["command"]} ${error.message}`;
+      console.error(this.prompt(errorPrompt));
     }
   }
 
@@ -31,32 +46,29 @@ class UserInput {
   }
 
   getValidNumber(orderNum) {
-    const orderWords = {
-      1: 'first',
-      2: 'second',
-    };
-    const order = orderWords[orderNum];
-    const numPrompt = `What is the ${order} number? `;
+    const numPrompt = `${PROMPTS[this.lang]["getNumber"]} ${orderNum}: `;
     let num;
 
     while (true) {
       num = parseFloat(question(this.prompt(numPrompt)));
       if (this.isValidNumber(num)) break;
       this.clearPrompt();
-      console.log(this.prompt("Hmmm...that doesn't look like a valid number."));
+      const invalidPrompt =  PROMPTS[this.lang]["invalidNumber"];
+      console.log(this.prompt(invalidPrompt));
     }
     return num;
   }
 
   getValidOperator() {
-    const operatorPrompt = 'What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide: ';
+    const operatorPrompt = PROMPTS[this.lang]["getOperator"];
     let operator;
 
     while (true) {
       operator = question(this.prompt(operatorPrompt));
       if (this.isValidOperator(operator)) break;
       this.clearPrompt();
-      console.log(this.prompt('Please enter 1, 2, 3, or 4.'));
+      const invalidPrompt = PROMPTS[this.lang]["invalidOperator"];
+      console.log(this.prompt(invalidPrompt));
     }
     return operator;
   }
@@ -70,14 +82,15 @@ class UserInput {
   }
 
   continueCalculation() {
-    const continuePrompt = 'Do you want to perform another calculation? (y/n): ';
+    const continuePrompt = PROMPTS[this.lang]["continueCalculation"];
     let wantsToContinue = false;
 
     while (true) {
       wantsToContinue = question(this.prompt(continuePrompt)).toLowerCase();
       if (this.isValidYesOrNo(wantsToContinue)) return wantsToContinue === 'y';
       this.clearPrompt();
-      console.log(this.prompt("Please enter y or n."));
+      const invalidPrompt = PROMPTS[this.lang]["invalidYesOrNo"];
+      console.log(this.prompt(invalidPrompt));
     }
   }
 
@@ -85,9 +98,3 @@ class UserInput {
     return response === 'y' || response === 'n';
   }
 }
-
-const userInput = new UserInput();
-const getUserOperandsAndOperator =
-  userInput.getUserOperandsAndOperator.bind(userInput);
-const continueCalculation = userInput.continueCalculation.bind(userInput);
-export { getUserOperandsAndOperator, continueCalculation };

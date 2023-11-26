@@ -1,17 +1,40 @@
 'use strict';
 
-import { getUserOperandsAndOperator, continueCalculation } from './UserInput.js';
+import UserInput from './UserInput.js';
 import calculate from './Calculator.js';
 
+// Current workaround for importing JSON files with ES modules
+// Reading the JSON file directly
+import { readFile } from 'fs/promises';
+const PROMPTS = JSON.parse(
+  await readFile(
+    new URL('./prompts.json', import.meta.url)
+  )
+);
+
+// Experimental syntax
+// import PROMPTS from './prompts.json' assert { type: 'json' };
+
+// Experimental syntax
+// const PROMPTS = await import('./prompts.json', {
+//   assert: { type: 'json' },
+// });
+
 class App {
+  constructor() {
+    this.lang = 'en';
+    this.userInput = new UserInput(this.lang);
+  }
+
   start() {
     let anotherCalculation = true;
     while (anotherCalculation) {
       this.printWelcome();
-      const [num1, num2, operator] = getUserOperandsAndOperator();
+      const [num1, num2, operator] =
+        this.userInput.getUserOperandsAndOperator();
       const result = calculate(num1, num2, operator);
       this.printResult(result);
-      anotherCalculation = continueCalculation();
+      anotherCalculation = this.userInput.continueCalculation();
     }
   }
 
@@ -20,11 +43,11 @@ class App {
   }
 
   printWelcome() {
-    this.prompt('Welcome to Calculator!');
+    this.prompt(PROMPTS[this.lang]['welcome']);
   }
 
   printResult(result) {
-    this.prompt(`The result is: ${result}`);
+    this.prompt(`${PROMPTS[this.lang]['result']}${result}`);
   }
 }
 
