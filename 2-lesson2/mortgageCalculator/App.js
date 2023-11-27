@@ -12,7 +12,7 @@ class App {
         getMortgageInfo();
       const monthlyPayment =
         calcMonthlyPayment(loanAmount, annualPercentageRate, loanDuration);
-      this.printResult(monthlyPayment);
+      console.log(`Your monthly payment is: ${monthlyPayment}`);
       anotherCalculation = continueCalculation();
     }
   }
