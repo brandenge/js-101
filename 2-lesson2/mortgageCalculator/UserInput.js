@@ -69,4 +69,7 @@ class UserInput {
 
 const userInput = new UserInput();
 const getMortgageInfo = userInput.getMortageInfo.bind(userInput);
-export default getMortgageInfo;
+const continueCalculation = userInput.continueCalculation.bind(userInput);
+
+exports.getMortgageInfo = getMortgageInfo;
+exports.continueCalculation = continueCalculation;
