@@ -47,30 +47,26 @@ export default class UserInput {
 
   getValidNumber(orderNum) {
     const numPrompt = `${PROMPTS[this.lang]["getNumber"]} ${orderNum}: `;
-    let num;
+    const invalidPrompt =  PROMPTS[this.lang]["invalidNumber"];
 
     while (true) {
-      num = parseFloat(question(this.prompt(numPrompt)));
-      if (this.isValidNumber(num)) break;
+      const num = parseFloat(question(this.prompt(numPrompt)));
+      if (this.isValidNumber(num)) return num;
       this.clearPrompt();
-      const invalidPrompt =  PROMPTS[this.lang]["invalidNumber"];
       console.log(this.prompt(invalidPrompt));
     }
-    return num;
   }
 
   getValidOperator() {
     const operatorPrompt = PROMPTS[this.lang]["getOperator"];
-    let operator;
+    const invalidPrompt = PROMPTS[this.lang]["invalidOperator"];
 
     while (true) {
-      operator = question(this.prompt(operatorPrompt));
-      if (this.isValidOperator(operator)) break;
+      const operator = question(this.prompt(operatorPrompt));
+      if (this.isValidOperator(operator)) return operator;
       this.clearPrompt();
-      const invalidPrompt = PROMPTS[this.lang]["invalidOperator"];
       console.log(this.prompt(invalidPrompt));
     }
-    return operator;
   }
 
   isValidNumber(num) {
@@ -83,13 +79,13 @@ export default class UserInput {
 
   continueCalculation() {
     const continuePrompt = PROMPTS[this.lang]["continueCalculation"];
-    let wantsToContinue = false;
+    const invalidPrompt = PROMPTS[this.lang]["invalidYesOrNo"];
 
     while (true) {
-      wantsToContinue = question(this.prompt(continuePrompt)).toLowerCase();
+      const wantsToContinue =
+        question(this.prompt(continuePrompt)).toLowerCase();
       if (this.isValidYesOrNo(wantsToContinue)) return wantsToContinue === 'y';
       this.clearPrompt();
-      const invalidPrompt = PROMPTS[this.lang]["invalidYesOrNo"];
       console.log(this.prompt(invalidPrompt));
     }
   }
