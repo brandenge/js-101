@@ -2,6 +2,7 @@
 
 import UserInput from './UserInput.mjs';
 import calculate from './Calculator.mjs';
+import { execSync } from 'child_process';
 
 // Current workaround for importing JSON files with ES modules
 // Reading the JSON file directly
@@ -28,6 +29,8 @@ class App {
 
   start() {
     let anotherCalculation = true;
+    this.clearPrompt();
+
     while (anotherCalculation) {
       this.printWelcome();
       const [num1, num2, operator] =
@@ -36,10 +39,22 @@ class App {
       this.printResult(result);
       anotherCalculation = this.userInput.continueCalculation();
     }
+    console.log(this.prompt(PROMPTS[this.lang]["goodbye"]));
   }
 
   prompt(message) {
     console.log(`=> ${message}`);
+  }
+
+  clearPrompt() {
+    try {
+      const result = execSync('clear', { encoding: 'utf-8' });
+      console.log(result);
+    } catch (error) {
+      const errorPrompt =
+        `${PROMPTS[this.lang]["errors"]["command"]} ${error.message}`;
+      console.error(this.prompt(errorPrompt));
+    }
   }
 
   printWelcome() {

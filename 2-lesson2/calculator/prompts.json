@@ -10,7 +10,8 @@
     "invalidYesOrNo": "Please enter y for yes or n for no.",
     "errors": {
       "command": "Error executing command: "
-    }
+    },
+    "goodbye": "Goodbye!"
   },
   "cn": {
     "welcome": "欢迎使用计算器!",
@@ -23,6 +24,7 @@
     "invalidYesOrNo": "请输入 y（是）或 n（否）.",
     "errors": {
       "command": "执行命令时出错："
-    }
+    },
+    "goodbye": "再見!"
   }
 }
