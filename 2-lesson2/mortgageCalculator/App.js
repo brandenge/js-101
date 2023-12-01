@@ -1,24 +1,32 @@
 'use strict';
 
 const { getMortgageInfo, continueCalculation } = require('./UserInput');
-const calcMonthlyPayment = require('./MortgageCalculator');
+const { calcMonthlyPayment } = require('./MortgageCalculator');
+const { execSync } = require('child_process');
 
 class App {
   start() {
     let anotherCalculation = true;
     while (anotherCalculation) {
-      this.printWelcome();
-      const [loanAmount, annualPercentageRate, loanDuration] =
+      this.clearPrompt();
+      console.log('Welcome to the Mortgage Calculator!');
+      const [loanAmount, annualPercentageRate, loanYears] =
         getMortgageInfo();
       const monthlyPayment =
-        calcMonthlyPayment(loanAmount, annualPercentageRate, loanDuration);
-      console.log(`Your monthly payment is: ${monthlyPayment}`);
+        calcMonthlyPayment(loanAmount, annualPercentageRate, loanYears);
+      console.log(`Your monthly payment is: $${monthlyPayment.toFixed(2)}`);
       anotherCalculation = continueCalculation();
     }
+    console.log('Goodbye!');
   }
 
-  printWelcome() {
-    console.log('Welcome to the Mortgage Calculator!');
+  clearPrompt() {
+    try {
+      const result = execSync('clear', { encoding: 'utf-8' });
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

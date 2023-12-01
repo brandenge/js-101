@@ -12,42 +12,52 @@ class UserInput {
 
   getLoanAmount() {
     while (true) {
-      const loanAmount = parseInt(question('What is the loan amount? '), 10);
-      if (this.isValidLoanAmount(loanAmount)) return loanAmount;
+      const loanAmount = question('What is the loan amount? ');
+      if (this.isValidLoanAmount(loanAmount)) {
+        return parseInt(loanAmount, 10);
+      }
       console.log('Please enter a positive integer.');
     }
   }
 
   isValidLoanAmount(loanAmount) {
-    return !Number.isNaN(loanAmount) && loanAmount > 0;
+    return /^\d+$/.test(loanAmount) &&
+      !Number.isNaN(parseInt(loanAmount, 10)) &&
+      parseInt(loanAmount, 10) > 0;
   }
 
   getAnnualPercentageRate() {
-    const prompt = 'What is the annual percentage rate? For example, enter 5.5 for 5.5%: ';
+    const prompt =
+      'What is the annual percentage rate? For example, enter 5.5 for 5.5%: ';
     while (true) {
-      const annualPercentageRate = parseFloat(question(prompt)) / 100;
+      const annualPercentageRate = question(prompt);
       if (this.isValidAnnualPercentageRate(annualPercentageRate)) {
-        return annualPercentageRate;
+        return parseFloat(annualPercentageRate) / 100;
       }
       console.log('Please enter a non-negative number');
     }
   }
 
   isValidAnnualPercentageRate(annualPercentageRate) {
-    return !Number.isNaN(annualPercentageRate) && annualPercentageRate >= 0;
+    return /^\d+(\.\d+)?$/.test(annualPercentageRate) &&
+      !Number.isNaN(parseFloat(annualPercentageRate)) &&
+      parseFloat(annualPercentageRate) >= 0;
   }
 
   getLoanDuration() {
     while (true) {
-      const loanDuration =
-        parseInt(question('What is the loan duration in months? '), 10);
-      if (this.isValidLoanDuration(loanDuration)) return loanDuration;
-      console.log('Please enter a positive integer.');
+      const loanDuration = question('What is the loan duration in years? ');
+      if (this.isValidLoanDuration(loanDuration)) {
+        return parseFloat(loanDuration);
+      }
+      console.log('Please enter a positive number.');
     }
   }
 
   isValidLoanDuration(loanDuration) {
-    return !Number.isNaN(loanDuration) && loanDuration > 0;
+    return /^\d+(\.\d+)?$/.test(loanDuration) &&
+    !Number.isNaN(parseFloat(loanDuration)) &&
+    parseFloat(loanDuration) > 0;
   }
 
   continueCalculation() {
