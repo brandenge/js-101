@@ -1,9 +1,9 @@
 'use strict';
 
 class Game {
-  static choices = ['rock', 'paper', 'scissors'];
+  static CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock'];
 
-  static losesTo = {
+  static LOSES_TO = {
     rock: ['paper', 'spock'],
     paper: ['scissors', 'lizard'],
     scissors: ['rock', 'spock'],
@@ -12,16 +12,16 @@ class Game {
   };
 
   static getWinner(player1, player2) {
-    if (this.losesTo[player1].includes(player2)) return player2;
+    if (this.LOSES_TO[player1].includes(player2)) return player2;
     else return player1;
   }
 
   static randomChoice() {
-    const randomIndex = Math.floor(Math.random() * this.choices.length);
-    return this.choices[randomIndex];
+    const randomIndex = Math.floor(Math.random() * this.CHOICES.length);
+    return this.CHOICES[randomIndex];
   }
 }
 
-exports.choices = Game.choices;
+exports.CHOICES = Game.CHOICES;
 exports.randomChoice = Game.randomChoice.bind(Game);
 exports.getWinner = Game.getWinner.bind(Game);

@@ -1,7 +1,7 @@
 'use strict';
 
 const { question } = require('readline-sync');
-const { choices } = require('./Game');
+const { CHOICES } = require('./Game');
 
 class UserInput {
   static prompt(message) {
@@ -10,15 +10,24 @@ class UserInput {
 
   static getPlayerChoice() {
     while (true) {
-      this.prompt(`Choose one: ${choices.join(', ')}`);
-      const choice = question().toLowerCase();
-      if (this.isValidChoice(choice)) return choice;
+      this.prompt(`Choose one: ${CHOICES.join(', ')}`);
+      const playerChoice = question().toLowerCase();
+      if (this.isValidChoice(playerChoice)) {
+        for (let choice of CHOICES) {
+          if (choice.startsWith(playerChoice)) return choice;
+        }
+      }
       this.prompt('Please select a valid choice.');
     }
   }
 
-  static isValidChoice(choice) {
-    return choices.includes(choice);
+  static isValidChoice(playerChoice) {
+    if (playerChoice === 's') return false;
+    let isValid = false;
+    for (let choice of CHOICES) {
+      if (choice.startsWith(playerChoice)) isValid = true;
+    }
+    return isValid;
   }
 
   static continueGame() {
