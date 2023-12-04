@@ -1,23 +1,33 @@
 'use strict';
 
 const { getPlayerChoice, continueGame } = require('./UserInput');
-const { randomChoice, getWinner } = require('./Game');
+const Game = require('./Game');
 
 const { execSync } = require('child_process');
 
 class App {
+  constructor() {
+    this.game = new Game();
+  }
+
   start() {
     let anotherGame = true;
+    this.clearPrompt();
+    this.prompt('*****   Welcome to Rock Paper Scissors Lizard Spock!   *****\n');
     while (anotherGame) {
-      this.clearPrompt();
-      this.prompt('Welcome to Rock Paper Scissors Lizard Spock!');
+      this.game.round += 1;
+      this.prompt(`-----  ROUND ${this.game.round}  -----`);
       const playerChoice = getPlayerChoice();
-      const computerChoice = randomChoice();
+      const computerChoice = Game.randomChoice();
       this.printChoices(playerChoice, computerChoice);
-      this.printWinner(playerChoice, computerChoice);
-      anotherGame = continueGame();
+      this.printRound(playerChoice, computerChoice);
+      if (this.game.bestOfFiveWinner()) {
+        this.printWinner();
+        anotherGame = continueGame();
+        this.game = new Game();
+      }
     }
-    this.prompt('Goodbye!');
+    this.prompt('*****   Goodbye!   *****');
   }
 
   clearPrompt() {
@@ -35,15 +45,21 @@ class App {
 
   printChoices(playerChoice, computerChoice) {
     const prompt =
-      `You chose ${playerChoice}, the computer chose ${computerChoice}`;
+      `You chose ${playerChoice.toUpperCase()}, the computer chose ${computerChoice.toUpperCase()}`;
     this.prompt(prompt);
   }
 
-  printWinner(playerChoice, computerChoice) {
-    const winner = getWinner(playerChoice, computerChoice);
-    if (playerChoice === computerChoice) this.prompt("It's a tie.");
-    else if (playerChoice === winner) this.prompt('You win!');
-    else this.prompt('The computer wins!');
+  printRound(playerChoice, computerChoice) {
+    const winner = this.game.getWinner(playerChoice, computerChoice);
+    if (playerChoice === computerChoice) this.prompt("This round is a tie.");
+    else if (playerChoice === winner) this.prompt('You win this round!');
+    else this.prompt('The computer wins this round!');
+    this.prompt(`Your score is: ${this.game.player1Score}. The computer's score is ${this.game.player2Score}\n`);
+  }
+
+  printWinner() {
+    if (this.game.player1Score === 3) this.prompt(`You won the best of 5!\n`);
+    else if (this.game.player2Score === 3) this.prompt(`The computer won the best of 5!\n`);
   }
 }
 

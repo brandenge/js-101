@@ -33,7 +33,7 @@ class UserInput {
   static continueGame() {
     let wantsToContinue = false;
     while (true) {
-      this.prompt('Do you want to play another game (y/n)?');
+      this.prompt('Do you want to play another game (y/n)?\n');
       wantsToContinue = question().toLowerCase();
       if (this.isValidYesOrNo(wantsToContinue)) return wantsToContinue === 'y';
       this.prompt('Please enter y for yes or n for no.');
